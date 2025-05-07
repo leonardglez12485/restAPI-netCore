@@ -34,3 +34,4 @@
 /Users/leonard/Documents/Develop/C#/TestAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/leonard/Documents/Develop/C#/TestAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/leonard/Documents/Develop/C#/TestAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/leonard/Documents/Develop/C#/TestAPI/obj/Debug/net9.0/TestAPI.sourcelink.json
