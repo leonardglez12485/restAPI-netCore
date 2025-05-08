@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TestAPI.Data;
 using TestAPI.Entities;
 
 namespace TestAPI.Controllers
@@ -7,6 +8,12 @@ namespace TestAPI.Controllers
     [Route("api/[controller]")]
     public class PersonController : ControllerBase
     {
+        private readonly DataContex _context;
+
+        public PersonController(DataContex context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public IActionResult GetPersons()
@@ -64,6 +71,27 @@ namespace TestAPI.Controllers
            new() { Id = 10, Name = "Hank", LastName = "Moore", Age = 38 },
          };
             return persons;
+        }
+
+        [HttpPost]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreatePerson([FromBody] Person person)
+        {
+            if (person == null)
+            {
+                return BadRequest("Person cannot be null");
+            }
+            try
+            {
+             _context.Persons.Add(person);
+             await _context.SaveChangesAsync();
+             return CreatedAtAction(nameof(GetPersonById), new { id = person.Id }, person);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error creating person: {ex.Message}");
+            }
         }
     }
 }
