@@ -1,7 +1,4 @@
 # compiled output
-/dist
-/node_modules
-/mongo
 /docker
 .env
 .env.old
@@ -25,7 +22,3 @@ logs
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-data/*
-
-yarn.lock
