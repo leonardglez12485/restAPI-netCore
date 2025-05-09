@@ -32,9 +32,9 @@ namespace TestAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task <IActionResult> GetPersonById(int id)
+        public async Task<IActionResult> GetPersonById(int id)
         {
-           var person = await  _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
+            var person = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
             if (person == null)
             {
                 return NotFound("Person not found");
@@ -44,7 +44,7 @@ namespace TestAPI.Controllers
 
         // private List<Person> FetchPersons()
         // {
-           
+
         // }
 
         [HttpPost]
@@ -78,18 +78,18 @@ namespace TestAPI.Controllers
             {
                 return BadRequest("Invalid person data");
             }
-            var existingPerson = await _context.Persons.FirstOrDefaultAsync(pers=> pers.Id == id);
+            var existingPerson = await _context.Persons.FirstOrDefaultAsync(pers => pers.Id == id);
             if (existingPerson == null)
             {
                 return NotFound("Person not found");
             }
             try
             {
-               foreach (var property in typeof(Person).GetProperties())
+                foreach (var property in typeof(Person).GetProperties())
                 {
-                  if (property.Name == "Id") continue; // Exclude Id property from update  
-                  var newValue = property.GetValue(person);
-                  property.SetValue(existingPerson, newValue);
+                    if (property.Name == "Id") continue; // Exclude Id property from update  
+                    var newValue = property.GetValue(person);
+                    property.SetValue(existingPerson, newValue);
                 }
                 // existingPerson.Name = person.Name;
                 // existingPerson.LastName = person.LastName;
@@ -97,13 +97,50 @@ namespace TestAPI.Controllers
 
                 _context.Persons.Update(existingPerson);
                 await _context.SaveChangesAsync();
-                return Ok(existingPerson);   
+                return Ok(existingPerson);
             }
             catch (Exception ex)
             {
                 return BadRequest($"Error updating person: {ex.Message}");
             }
-            
+
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeletePerson(int id)
+        {
+            var person = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
+            if (person == null)
+            {
+                return NotFound("Person not found");
+            }
+            try
+            {
+                _context.Persons.Remove(person);
+                await _context.SaveChangesAsync();
+                return Ok("Person deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error deleting person: {ex.Message}");
+            }
+        }
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]   
+        public async Task<IActionResult> SearchPersons([FromQuery] string name)
+        {
+            var persons = await _context.Persons
+                .Where(p => p.Name.Contains(name))
+                .ToListAsync();
+            if (persons == null || persons.Count == 0)
+            {
+                return NotFound("No persons found with the given name");
+            }
+            return Ok(persons);
         }
         
     }

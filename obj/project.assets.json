@@ -5469,11 +5469,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/leonard/Documents/Develop/C#/TestAPI/TestAPI.csproj",
+      "projectUniqueName": "/Users/leonard/Documents/Develop/Asp .Net/TestAPI/TestAPI.csproj",
       "projectName": "TestAPI",
-      "projectPath": "/Users/leonard/Documents/Develop/C#/TestAPI/TestAPI.csproj",
+      "projectPath": "/Users/leonard/Documents/Develop/Asp .Net/TestAPI/TestAPI.csproj",
       "packagesPath": "/Users/leonard/.nuget/packages/",
-      "outputPath": "/Users/leonard/Documents/Develop/C#/TestAPI/obj/",
+      "outputPath": "/Users/leonard/Documents/Develop/Asp .Net/TestAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/leonard/.nuget/NuGet/NuGet.Config"
