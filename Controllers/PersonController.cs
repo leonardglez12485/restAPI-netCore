@@ -72,7 +72,7 @@ namespace TestAPI.Controllers
         {
             if (personDto == null)
             {
-                return BadRequest("Person cannot be null");
+                return BadRequest("Person cannot be null pppppppp");
             }
             try
             {
@@ -90,7 +90,7 @@ namespace TestAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error creating person: {ex.Message}");
+                return BadRequest($"Error creating person, please try again: {ex.Message}");
             }
         }
 
