@@ -5,7 +5,7 @@ namespace TestAPI.DTOs
     {
         public required string Name { get; set; }
         public required string LastName { get; set; }
-         public DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
    
     }
 }

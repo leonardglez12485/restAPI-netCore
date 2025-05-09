@@ -46,7 +46,7 @@ namespace TestAPI.Controllers
         public async Task<IActionResult> GetPersonById(int id)
         {
             var person = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
-             if (person == null)
+            if (person == null)
             {
                 return NotFound("Person not found");
             }
@@ -111,12 +111,21 @@ namespace TestAPI.Controllers
             }
             try
             {
-                foreach (var property in typeof(Person).GetProperties())
+                var dtoProperties = typeof(EditPersonDto).GetProperties();
+                var entityProperties = typeof(Person).GetProperties();
+
+                foreach (var dtoProp in dtoProperties)
                 {
-                    if (property.Name == "Id") continue; // Exclude Id property from update  
-                    var newValue = property.GetValue(personDto);
-                    property.SetValue(existingPerson, newValue);
-                }             
+                    var value = dtoProp.GetValue(personDto);
+                    if (value != null)
+                    {
+                        var entityProp = entityProperties.FirstOrDefault(p => p.Name == dtoProp.Name);
+                        if (entityProp != null && entityProp.CanWrite)
+                        {
+                            entityProp.SetValue(existingPerson, value);
+                        }
+                    }
+                }
                 _context.Persons.Update(existingPerson);
                 await _context.SaveChangesAsync();
                 return Ok(existingPerson);
