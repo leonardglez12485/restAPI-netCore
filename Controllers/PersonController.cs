@@ -26,8 +26,9 @@ namespace TestAPI.Controllers
                 .Select(p => new GetPersonDto
                 {
                     Name = p.Name,
-                    LastName = p.LastName
-                    // Mapea más propiedades si es necesario
+                    LastName = p.LastName,
+                    BirthDate = p.BirthDate,
+                    IsActive = p.IsActive,
                 })
                 .ToListAsync();
 
@@ -97,9 +98,9 @@ namespace TestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdatePerson(int id, [FromBody] Person person)
+        public async Task<IActionResult> UpdatePerson(int id, [FromBody] EditPersonDto personDto)
         {
-            if (person == null || id != person.Id)
+            if (personDto == null)
             {
                 return BadRequest("Invalid person data");
             }
@@ -113,7 +114,7 @@ namespace TestAPI.Controllers
                 foreach (var property in typeof(Person).GetProperties())
                 {
                     if (property.Name == "Id") continue; // Exclude Id property from update  
-                    var newValue = property.GetValue(person);
+                    var newValue = property.GetValue(personDto);
                     property.SetValue(existingPerson, newValue);
                 }             
                 _context.Persons.Update(existingPerson);
@@ -124,7 +125,6 @@ namespace TestAPI.Controllers
             {
                 return BadRequest($"Error updating person: {ex.Message}");
             }
-
         }
 
         [HttpDelete("{id}")]
@@ -156,6 +156,13 @@ namespace TestAPI.Controllers
         {
             var persons = await _context.Persons
                 .Where(p => p.Name.Contains(name))
+                .Select(r => new GetPersonDto
+                {
+                    Name = r.Name,
+                    LastName = r.LastName,
+                    IsActive = r.IsActive,
+                    BirthDate = r.BirthDate
+                })
                 .ToListAsync();
             if (persons == null || persons.Count == 0)
             {
